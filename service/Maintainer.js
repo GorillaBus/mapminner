@@ -5,7 +5,6 @@ const mv = require("mv");
 
 let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Registry) => {
 
-
   /*
       Finds and removes inconsistent Bitmaps and associated State Logs
       All files associated with inconsistent content are moved back to the
@@ -67,7 +66,7 @@ let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Regist
             return reject("Missing zone definition file");
           }
 
-          let zones = require("../"+ zoneFile);
+          let zones = require("../" + zoneFile);
           let zonesTotal = zones.length;
           Logger.info("Creating map model...");
 
@@ -365,9 +364,8 @@ let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Regist
     // Push the created Area IDs into the Zone object
     return Promise.all(promises)
       .then(areas => {
-        let promises = [];
         areas.forEach(_area => {
-          zone.areas.push(mongoose.Types.ObjectId(_area.id));
+          zone.areas.push(mongoose.Types.ObjectId(_area._id));
         });
         return zone.save();
     });
