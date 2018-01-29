@@ -182,7 +182,7 @@ let Registry = (appSettings, Logger, mongoose, models, Utils, StateLogger, Reade
           let parsedData = parseBmpFileName(filename);
 
           // Find bitmap's zone
-          let zonePromise = models.Zone.find({ code: parsedData.code }, { });
+          let zonePromise = models.Zone.find({ code: parsedData.code }, { _id: 1, areas: 1, });
 
           // Find bitmap's pixel data
           let pngDataPromise = Reader.readBmp(file);
@@ -204,22 +204,18 @@ let Registry = (appSettings, Logger, mongoose, models, Utils, StateLogger, Reade
                   })
                   .then(bmp => {
                     resolve(bmp);
-                  })
-                  .catch(err => {
-                    return reject(err);
                   });
 
-                });
+                })
+                .catch(reject);
+
             })
-            .catch(err => {
-              return reject(err);
-            });
+            .catch(reject);
         }
 
-      });
-    })
-    .catch(err => {
-      return reject(err);
+      })
+      .catch(reject);;
+
     });
   };
 
