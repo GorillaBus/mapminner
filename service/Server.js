@@ -19,6 +19,7 @@ let Server = (appSettings, Logger) => {
     });
 
     server.start(() => {
+      running = true;
       Logger.info('Http server listening on port: '+ server.port);
     });
 
