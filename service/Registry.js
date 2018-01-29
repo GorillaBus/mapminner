@@ -241,7 +241,7 @@ let Registry = (appSettings, Logger, mongoose, models, Utils, StateLogger, Reade
         let p = StateLogger.create({
             time: time,
             data: data[a],
-            area: area._id,
+            area: area,
             zone: zone._id
           });
         promises.push(p);
