@@ -1,0 +1,133 @@
+<!--
+  Displays a 640x640 map with the center in the given LAT / LONG.
+  A valid API key must also be provided.
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      html, body {
+        width: 640px;
+        height: 663px;
+        margin: 0;
+        padding: 0;
+      }
+      .map {
+        width: 640px;
+        height: 663px;
+        float: left;
+        overflow:hidden;
+      }
+      .clear {
+        clear: both;
+      }
+    </style>
+  </head>
+  <body>
+
+    <script type="text/javascript">
+      var styles = {
+        default: null,
+        hide: [{
+          featureType: "all",
+          elementType: "geometry",
+          stylers: [
+              { color: "#000000" },
+              { lightness: 0 }
+            ]
+        },{
+            featureType: 'poi',
+            stylers: [{
+              visibility: 'off',
+              color: "#000000",
+              lightness: 0
+            }]
+          },
+          {
+            featureType: 'administrative',
+            stylers: [{
+              visibility: 'off',
+              color: "#000000",
+              lightness: 0
+            }]
+          },
+          {
+            featureType: 'road',
+            stylers: [{
+              visibility: 'off',
+              color: "#000000",
+              lightness: 0
+            }]
+          },
+          {
+            featureType: 'transit',
+            stylers: [{
+              visibility: 'off',
+              color: "#000000",
+              lightness: 0
+            }]
+          }]
+      };
+
+      function initialize() {
+        var bodyElement = document.getElementsByTagName("BODY")[0];
+        var lat = getUrlVars()['lat'];
+        var lon = getUrlVars()['lon'];
+        var hide = getUrlVars()['hide'] === 'false' ? false:true;
+
+        var domElement = document.createElement("DIV");
+        domElement.setAttribute("id", "map");
+        domElement.setAttribute("class", "map");
+        bodyElement.appendChild(domElement);
+
+
+        var mapElement = "map";
+        google.maps.Map.prototype.setCenterWithOffset= function(latlng, offsetX, offsetY) {
+            var map = this;
+            var ov = new google.maps.OverlayView();
+            ov.onAdd = function() {
+                var proj = this.getProjection();
+                var aPoint = proj.fromLatLngToContainerPixel(latlng);
+                aPoint.x = aPoint.x+offsetX;
+                aPoint.y = aPoint.y+offsetY;
+                map.setCenter(proj.fromContainerPixelToLatLng(aPoint));
+            };
+            ov.draw = function() {};
+            ov.setMap(this);
+        };
+
+        var latlng = new google.maps.LatLng(lat, lon);
+        var myOptions = {
+            zoom: 15,
+            center: latlng,
+            mapTypeControl: false,
+            disableDefaultUI: true
+        };
+        var map = new google.maps.Map(document.getElementById(mapElement), myOptions);
+        map.setCenterWithOffset(latlng, 0, 12);
+
+        var trafficLayer = new google.maps.TrafficLayer();
+        trafficLayer.setMap(map);
+        if (hide) {
+          map.setOptions({ styles: styles['hide'] });
+        }
+      }
+
+      function getUrlVars() {
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+        });
+        return vars;
+      }
+
+      var apiKey = getUrlVars()['key'];
+      var tag = "<script async defer src='https://maps.googleapis.com/maps/api/js?key="+ apiKey +"&callback=initialize'></sc"+"ript>";
+      document.write(tag);
+    </script>
+
+  </body>
+</html>

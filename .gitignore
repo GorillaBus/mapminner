@@ -1,0 +1,4 @@
+node_modules/
+log/*
+poc/
+config/settings.json

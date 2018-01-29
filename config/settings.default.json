@@ -1,0 +1,60 @@
+{
+  "app" : {
+    "name" : "Map Miner",
+    "version" : "0.95"
+  },
+  "mongodb" : {
+    "host" : "127.0.0.1",
+    "db" : "mapminer",
+    "port" : 27017,
+    "user" : "",
+    "password" : ""
+  },
+  "paths" : {
+    "bmp" : "bmp/",
+    "bmp_temp" : "bmp.tmp/",
+    "remote_bmp": "/tmi-bmp/",
+    "remote_bmp_bkp" : "/bkp/"
+  },
+  "http" : {
+    "root" : "public_html/",
+    "port" : 8000,
+    "host" : "",
+    "index" : "display-zone.html"
+  },
+  "ftp" : {
+    "use_ftp" : false,
+    "host" : "",
+    "user": "",
+    "pass": "",
+    "secure" : true,
+    "batch" : true
+  },
+  "map": {
+    "zones" : 49,
+    "areas_per_zone" : 64
+  },
+  "register": {
+    "auto_repair_db" : true,
+    "log_upsert" : true,
+    "queue_max": 2
+  },
+  "mining": {
+    "service_url" : "http://localhost:8000/display-zone.html",
+    "user_agent" : "",
+    "delay": 4,
+    "timeout" : 180,
+    "size" : "640x640",
+    "api_key" : ""
+  },
+  "logging": {
+    "file" : "log/app.log",
+    "max_size" : 10485760,
+    "compress" : true,
+    "stdout" : true
+  },
+  "language" : {
+    "week_days" : ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"],
+    "months" : ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"]
+  }
+}
