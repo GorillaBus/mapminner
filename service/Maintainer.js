@@ -5,6 +5,68 @@ const mv = require("mv");
 
 let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Registry) => {
 
+  let exportData = (file) => {
+    return new Promise((resolve, reject) => {
+
+      models.Log.aggregate([
+        {
+          $group: {
+            _id: {
+              area: "$area",
+              year: "$year",
+              month: "$month",
+              day: "$day",
+              hour: "$hour"
+            },
+            avg: { $avg : "$score" },
+            month_str: { $first: "$month_str" },
+            day_str: { $first: "$day_str" },
+            zone: { $first: "$zone" }
+          }
+        },{
+          $project: {
+            _id: 0,
+            zone: "$zone",
+            area: "$_id.area",
+            year: "$_id.year",
+            month: "$_id.month",
+            month_str: "$month_str",
+            day: "$_id.day",
+            day_str: "$day_str",
+            hour: "$_id.hour",
+            long: "$long",
+            lat: "$lat",
+            avg: 1
+          }
+        }
+      ])
+      .allowDiskUse(true)
+      .then(results => {
+
+        models.Area.populate(results, { path: "area", select: { id: 1, order: 1 }})
+          .then(r => {
+            return models.Zone.populate(results, { path: "zone", select: { code: 1 }});
+          })
+          .then(r => {
+
+            // Print title
+            console.log("ZONE,ID,ORDER,YEAR,MONTH,MONTH.STR,DAY,DAY.STR,HOUR,MEDIA");
+
+            // Print content
+            results.forEach(res => {
+              console.log(res.zone.code +","+ res.area.id +","+ res.area.order +","+ res.year +","+ res.month +","+ res.month_str +","+ res.day +","+ res.day_str +","+ res.hour +","+ res.avg);
+            });
+
+            resolve();
+          })
+          .catch(reject);
+
+      })
+      .catch(reject);
+
+    });
+  };
+
   /*
       Finds and removes inconsistent Bitmaps and associated State Logs
       All files associated with inconsistent content are moved back to the
@@ -405,7 +467,8 @@ let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Regist
   return {
     createMapModel: createMapModel,
     verifyFromBkp: verifyFromBkp,
-    reshapeDb: reshapeDb
+    reshapeDb: reshapeDb,
+    export: exportData
   }
 
 };
