@@ -137,13 +137,12 @@ let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Regist
               Logger.info("Created map model with "+ zonesTotal +" Zones and "+ areaCount +" Areas");
               resolve();
             })
-            .catch(err => {
-              return reject(err);
-            });
+            .catch(reject);
         })
-        .catch(err => { return reject(err); });
+        .catch(reject);
     });
   };
+
 
   /*
       When files are collected on a remote server and are accessed via FTP,
