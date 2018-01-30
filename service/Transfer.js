@@ -31,7 +31,7 @@ let Transfer = (appSettings, Logger, Utils) => {
       .then(getBmpList)
       .then(list => {
         let totalNodes = list.length;
-        let fileNamePattern = /[0-9]{13,}-[a-z]{1}-[\d]{1,2}.png$/g;
+        let fileNamePattern = /[0-9]{13,}-[a-z]{1}-[a-zA-Z0-9]{1,16}.png$/g;
         let clientIndex = 0;
         let batchSize = appSettings.map.zones;
 

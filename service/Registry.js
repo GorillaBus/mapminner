@@ -73,7 +73,7 @@ let Registry = (appSettings, Logger, mongoose, models, Utils, StateLogger, Reade
               }
 
               let total = files.length;
-              let fileNamePattern = /[0-9]{13,}-[a-z]{1}[\d]{1,2}.png$/g;
+              let fileNamePattern = /[0-9]{13,}-[a-z]{1}[a-zA-Z0-9]{1,16}.png$/g;
               for (let f=0; f<total; f++) {
                 let file = files[f];
                 if (file.match(fileNamePattern) === null) {
