@@ -6,8 +6,8 @@ const model = (mongoose) => {
     lat: { type: Number, required: true },
     zone: { type: mongoose.Schema.Types.ObjectId, ref: 'Zone', required: true }
   });
-  let model = mongoose.model("Area", AreaSchema);
 
+  let model = mongoose.model("Area", AreaSchema);
   return model;
 };
 

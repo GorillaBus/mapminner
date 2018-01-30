@@ -4,6 +4,7 @@ const model = (mongoose) => {
       date: { type: Date, required: true },
       zone: { type: mongoose.Schema.Types.ObjectId, ref: 'Zone', required: true }
   });
+
   let model = mongoose.model("Bmp", BmpSchema);
   return model;
 };

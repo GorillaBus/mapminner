@@ -15,10 +15,13 @@ const model = (mongoose, models) => {
       low: { type: Number, default: 0 },
       null: { type: Number, default: 0 }
     },
-    score: { type: Number, required: true },
+    score: { type: Number, default: 0 },
     zone: { type: mongoose.Schema.Types.ObjectId, ref: 'Zone', required: true },
     area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area', required: true }
   });
+
+  LogSchema.index({ time: 1, area: 1 }, { unique: true, name: "time_1_area_1" });
+  LogSchema.set('autoIndex', false);
 
   let model = mongoose.model("Log", LogSchema);
 

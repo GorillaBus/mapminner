@@ -5,6 +5,14 @@ const mv = require("mv");
 
 let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Registry) => {
 
+  /*
+      Elaborates an aggregated dataset of the average hourly traffic score for each area.
+      It will print to the stdout so be sure you pipe the output to a file or use "export.sh" script:
+
+        ./export.sh <file-name.csv>
+
+      Output files will be dropped into the csv/ directory
+  */
   let exportData = (file) => {
     return new Promise((resolve, reject) => {
 
@@ -463,7 +471,37 @@ let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Regist
     });
   };
 
+
+  /*
+      Drops and re-creates all index for each mongodb collection.
+      Run this from time to time to optimize performance but keep in mind that
+      this may take some time to complete on big databases
+  */
+  let reIndex = () => {
+    return new Promise((resolve, reject) => {
+      Logger.info("Reconstructing DB indexes, please wait...");
+
+      let promises = [];
+
+      mongoose.modelNames().map(m => {
+        let p = mongoose.model(m).collection.dropAllIndexes()
+          .then(res => {
+            return mongoose.model(m).ensureIndexes()
+              .then(() => {
+                Logger.info("Indexes re-created for "+ m);
+              });
+          });
+        promises.push(p);
+      });
+
+      Promise.all(promises)
+        .then(resolve)
+        .catch(reject);
+    });
+  };
+
   return {
+    reIndex: reIndex,
     createMapModel: createMapModel,
     verifyFromBkp: verifyFromBkp,
     reshapeDb: reshapeDb,
