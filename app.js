@@ -16,7 +16,7 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const CommandLineArgs = require('command-line-args')
 mongoose.Promise = Promise;
-mongoose.set('debug', true);
+
 /* Define and collect comand line arguments */
 const optionDefinitions = [
   { name: 'svc', type: String },
