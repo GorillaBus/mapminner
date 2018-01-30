@@ -8,4 +8,4 @@ fi
 
 exec &> csv/$1
 
-node app.js --svc Maintainer --req export
+node app.js --no_log_stdout --svc Maintainer --req export

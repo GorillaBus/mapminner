@@ -11,15 +11,30 @@ try {
     process.exit();
 }
 
-/* Init Logger */
-const Logger = require('./class/Logger')(appSettings);
-Logger.info("Initializing "+ appSettings.app.name +" v"+ appSettings.app.version);
-
 /* Libraries & 3th party components */
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
-const commandLineArgs = require('command-line-args')
+const CommandLineArgs = require('command-line-args')
 mongoose.Promise = Promise;
+mongoose.set('debug', true);
+/* Define and collect comand line arguments */
+const optionDefinitions = [
+  { name: 'svc', type: String },
+  { name: 'req', type: String },
+  { name: 'params', type: String },
+  { name: 'no_log_stdout', type: Boolean }
+];
+const request = CommandLineArgs(optionDefinitions, { partial: true });
+
+// Override std output (usefull when exporting data with bash scripts)
+if (request.no_log_stdout === true) {
+  appSettings.logging.stdout = false;
+}
+
+/* Init Logger */
+const Logger = require('./class/Logger')(appSettings);
+
+Logger.info("Initializing "+ appSettings.app.name +" v"+ appSettings.app.version);
 
 /* Local componnents */
 const Db = require('./class/Db')(appSettings, Logger);
@@ -28,13 +43,6 @@ const models = require('./model')(mongoose);
 const services = require('./service')(appSettings, Logger, mongoose, models, Utils);
 const Router = require('./class/Router.js')(appSettings, Logger, services);
 
-/* Define and collect comand line arguments */
-const optionDefinitions = [
-  { name: 'svc', type: String },
-  { name: 'req', type: String },
-  { name: 'params', type: String }
-];
-const request = commandLineArgs(optionDefinitions, { partial: true });
 
 /* Route */
 Db.connect()
