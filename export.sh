@@ -8,4 +8,4 @@ fi
 
 exec &> csv/$1
 
-node app.js --no_log_stdout --svc Maintainer --req export
+node --max-old-space-size=4096 app.js --no_log_stdout --svc Maintainer --req export
