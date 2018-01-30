@@ -2,11 +2,16 @@ const Promise = require('bluebird');
 const PNG = require('node-png').PNG;
 const fs = require("fs");
 
-let Reader = (Logger) => {
+let Reader = (appSettings, Logger) => {
 
   /* Read all areas within a bitmap */
   let readBmp = (filename) => {
     return new Promise((resolve, reject) => {
+      let factor;
+
+      if ((factor = findAreaCountFactor()) === false) {
+        return reject("Invalid number of areas per zone. Use n^2 -example: 64 (8x8)-");
+      }
 
       let pngFile = new PNG({
         filterType: 0
@@ -15,10 +20,10 @@ let Reader = (Logger) => {
         .pipe(pngFile);
 
       fileReadStream.on('parsed', (data) => {
-        let sqSize = pngFile.width / 8;
+        let sqSize = pngFile.width / factor;
         let parsedData = [];
-        for (let c=0; c<8; c++) {
-          for (let r=0; r<8; r++) {
+        for (let c=0; c<factor; c++) {
+          for (let r=0; r<factor; r++) {
             let col = c;
             let row = r;
             let dst = new PNG({width: sqSize, height: sqSize});
@@ -78,6 +83,17 @@ let Reader = (Logger) => {
 
       return 'n';
     }
+  };
+
+
+  /* Private / Local */
+
+
+  let findAreaCountFactor = () => {
+    let areas = appSettings.map.areas_per_zone;
+    let root = Math.sqrt(areas);
+    // Root must be integer
+    return (root % 1 !== 0) ? false:root;
   };
 
   return {

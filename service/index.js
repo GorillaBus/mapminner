@@ -1,6 +1,6 @@
 let Services = (appSettings, Logger, mongoose, models, Utils) => {
 
-  let Reader = require("./Reader")(Logger);
+  let Reader = require("./Reader")(appSettings, Logger);
   let Server = require("./Server")(appSettings, Logger);
   let Miner = require("./Miner")(appSettings, Logger, models, Utils);
   let Transfer = require("./Transfer")(appSettings, Logger, Utils);
