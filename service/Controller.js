@@ -10,7 +10,7 @@ let Controller = (appSettings, Logger, Server, Miner, Transfer, Registry) => {
       Server.start();
     }
     return Miner.mine()
-      .then();
+      .then(Server.stop);
   };
 
 
