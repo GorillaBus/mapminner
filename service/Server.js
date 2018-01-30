@@ -23,10 +23,6 @@ let Server = (appSettings, Logger) => {
       Logger.info('Http server listening on port: '+ server.port);
     });
 
-    server.on('request', (req, res) => {
-      Logger.info("Http request "+ req.path);
-    });
-
     server.on('response', (req, res, err, file, stat) => {
       if (err) { Logger.error(err); }
     });
