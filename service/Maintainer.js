@@ -58,11 +58,11 @@ let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Regist
           .then(r => {
 
             // Print title
-            console.log("ZONE,ID,ORDER,YEAR,MONTH,MONTH.STR,DAY,DAY.STR,HOUR,MEDIA");
+            console.log("ZONE,ID,YEAR,MONTH,MONTH.STR,DAY,DAY.STR,HOUR,MEDIA");
 
             // Print content
             results.forEach(res => {
-              console.log(res.zone.code +","+ res.area.id +","+ res.area.order +","+ res.year +","+ res.month +","+ res.month_str +","+ res.day +","+ res.day_str +","+ res.hour +","+ res.avg);
+              console.log(res.zone.code +","+ res.area.id +","+ res.year +","+ res.month +","+ res.month_str +","+ res.day +","+ res.day_str +","+ res.hour +","+ res.avg);
             });
 
             resolve();
@@ -114,7 +114,6 @@ let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Regist
     });
   };
 
-
   /*
       Generates the data-model for the map to be used.
       A map is divided in Zones which must also be be divided into Areas.
@@ -125,7 +124,6 @@ let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Regist
   */
   let createMapModel = (zoneFile, force) => {
     zoneFile = zoneFile || appSettings.map.model_file;
-
     if (force != true) { force = false; }
     return new Promise((resolve, reject) => {
       let areaCount = appSettings.map.areas_per_zone;
@@ -443,7 +441,7 @@ let Maintainer = (appSettings, Logger, Utils, mongoose, models, Transfer, Regist
   // Verify if DB has any Zone / Area defined
   let checkDbEmptyMapModel = (remove) => {
     if (remove === true) {
-      if (models.Zone.db.name == "trafico") {
+      if (models.Zone.db.name === "trafico") {
         throw Error("Wo! Change the database!");
         return;
       }
