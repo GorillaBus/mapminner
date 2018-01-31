@@ -1,6 +1,6 @@
 # Map Miner
 
-Collect public data from mapping services and generate statistic data.
+Collect public traffic data from mapping services and generate statistic data.
 
 
 # Document index
