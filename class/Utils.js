@@ -78,7 +78,7 @@ let Utils = (appSettings, Logger) => {
   /* Search and destroy temporal files */
   let cleanUpTemp = () => {
     return new Promise ((resolve, reject) => {
-      let tempFileNamePattern = /[0-9]{13,}-[a-z]{1}[a-zA-Z0-9]{1,16}.png.[\d]+$/g;
+      let tempFileNamePattern =  /[0-9]{13,}-[a-zA-Z0-9]{1,16}.png$/g;
 
       readDir(appSettings.paths.bmp_temp)
         .then(files => {
