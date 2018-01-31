@@ -266,7 +266,7 @@ let Registry = (appSettings, Logger, mongoose, models, Utils, StateLogger, Reade
   };
 
   let createBmpQueue = () => {
-    let q = Queue({
+    let q = new Queue({
       concurrency: appSettings.register.queue_max
     });
 
